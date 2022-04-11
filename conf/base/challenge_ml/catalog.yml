@@ -1,0 +1,25 @@
+data_pre_2020:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/data_pre_2020.csv
+
+data_2020:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/data_2020.csv
+
+pipeline_tunned:
+  type: pickle.PickleDataSet
+  filepath: data/07_model_output/model_tunned.pickle
+  versioned: true
+
+
+
+#Feature Selection
+trained_pipeline_FeatureSelector:
+  type: pickle.PickleDataSet
+  filepath: data/07_model_output/trained_pipeline_FeatureSelector.pickle
+
+
+feature_list:
+  type: pickle.PickleDataSet
+  filepath: data/07_model_output/feature_list.pickle
+  versioned: true

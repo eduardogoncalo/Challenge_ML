@@ -1,0 +1,32 @@
+# MLFlow 
+mlflow_classify:
+  type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
+
+mlflow_classify_validation:
+  type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
+
+best_model_artifact:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pickle.PickleDataSet
+    filepath: data/06_models/best_pipeline_automl.pickle
+
+
+xgb_feature_importance:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: matplotlib.MatplotlibWriter
+    filepath: data/08_reporting/xgb_feature_importance.png
+
+
+confusion_matrix:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: matplotlib.MatplotlibWriter
+    filepath: data/08_reporting/confusion_matrix.png
+
+confusion_matrix_validation:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: matplotlib.MatplotlibWriter
+    filepath: data/08_reporting/confusion_matrix_validation.png

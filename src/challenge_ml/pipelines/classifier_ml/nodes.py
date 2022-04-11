@@ -10,7 +10,6 @@ from imblearn.under_sampling import RandomUnderSampler
 from ..helpers import cost_function_model, convert
 from sklearn.model_selection import KFold, RandomizedSearchCV
 import scipy.stats as stats
-import matplotlib.pyplot as plt
 from sklearn.metrics import (
     recall_score,
     accuracy_score,
@@ -24,8 +23,9 @@ from sklearn.preprocessing import PolynomialFeatures
 def create_ibmpipeline(
     data_train: pd.DataFrame, target_feature: str, feature_list: list
 ):
-    """In this function will be create a pipeline from iblearn that will be fit. Using the proprietis of the pipeline
-    it's possible build personalized steps. Mode details at README"""
+    """In this function will be create a pipeline from iblearn that will be fit.
+    Using the proprietis of the pipeline it's possible build personalized steps.
+    More details at README"""
 
     X = data_train[feature_list]
     y = data_train[target_feature]
@@ -62,6 +62,8 @@ def split_train_test(X: pd.DataFrame, y: pd.DataFrame, test_size_params: float):
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=test_size_params, random_state=42
     )
+    '''split train, test dataset. This node is used in the feature selection 
+    and challenge ml pipeline.'''
 
     return X_train, X_test, y_train, y_test
 
@@ -69,6 +71,8 @@ def split_train_test(X: pd.DataFrame, y: pd.DataFrame, test_size_params: float):
 def fit_model(
     pre_trained_pipeline: Pipeline, X_train: pd.DataFrame, y_train: pd.DataFrame
 ):
+    '''This node will fit the model coming from create_ibmpipeline 
+    and return the trained model'''
     return pre_trained_pipeline.fit(X_train, y_train)
 
 
@@ -81,7 +85,8 @@ def randomizesearch_kfold(
     verbose_params: int,
     n_jobs_params: int,
 ):
-
+    '''This step will fit the model with random search.
+     Random parameters come from preprocessing (first node)'''
     kfold = KFold(n_splits=5, shuffle=True, random_state=42)
 
     # TO do
@@ -109,6 +114,7 @@ def randomizesearch_kfold(
 
 
 def predict_model(pipeline_tunned: Pipeline, X_test: pd.DataFrame):
+    '''Predict the results and return y_pred_tunned'''
 
     y_pred_tunned = pipeline_tunned.predict(X_test)
 
@@ -116,6 +122,8 @@ def predict_model(pipeline_tunned: Pipeline, X_test: pd.DataFrame):
 
 
 def model_performim_mlflow(y_test: pd.DataFrame, y_pred_tunned: pd.DataFrame):
+    '''This node allows kedro to create creators and parameters in mlflow.
+    The output of this model is in  catalog storing all the parameters.'''
 
     mlflow_metrics = {
         "accuracy": {
@@ -129,13 +137,14 @@ def model_performim_mlflow(y_test: pd.DataFrame, y_pred_tunned: pd.DataFrame):
         "total_costs": {
             "value": cost_function_model(convert(y_test), convert(y_pred_tunned)),
             "step": 1,
-        }
+        },
     }
 
     return mlflow_metrics
 
 
 def plot_matrix_confusion(y_test, y_pred_tunned, cmap_="viridis"):
+    '''Create a confusion matrix in mlflow'''
 
     cm = confusion_matrix(y_test, y_pred_tunned)
     cmd = ConfusionMatrixDisplay(cm, display_labels=["neg", "pos"])

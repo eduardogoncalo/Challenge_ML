@@ -5,6 +5,7 @@ from imblearn.pipeline import Pipeline
 def predict_validation_dataset(
     model: Pipeline, data_validation: pd.DataFrame, target_feature: str
 ):
+    '''Preditc validation dataset'''
 
     y_real = data_validation[target_feature]
     y_pred = model.predict(data_validation)

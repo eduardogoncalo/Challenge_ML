@@ -70,8 +70,8 @@ def create_pipeline(**kwargs):
             node(
                 func=model_performim_mlflow,
                 inputs=[
-                    "y_pred_tunned",
                     "y_test",
+                    "y_pred_tunned",
                 ],
                 outputs="mlflow_classify",
                 name="mlflow_metrics",

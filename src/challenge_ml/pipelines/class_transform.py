@@ -1,6 +1,5 @@
 import logging
 import pandas as pd
-from typing import List, Any
 from sklearn.base import BaseEstimator
 
 
@@ -9,6 +8,8 @@ logging.basicConfig(level=logging.INFO)
 
 
 class CastFloat(BaseEstimator):
+    '''will transform columns to float'''
+    
     type_transform = "float"
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
@@ -23,6 +24,9 @@ class CastFloat(BaseEstimator):
 
 
 class ReplaceStr(BaseEstimator):
+    ''' columns with 'na' will be replace by np.nan, to be use in padas
+    how missing values.'''
+
     def __init__(self, inicial_value: str, final_value: any) -> None:
         self.inicial_value = inicial_value
         self.final_value = final_value

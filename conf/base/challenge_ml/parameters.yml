@@ -1,6 +1,6 @@
 target_feature: class
 
-test_size_params: 0.20
+test_size_params: 0.30
 
 
 
@@ -18,10 +18,9 @@ classifier__max_depth:
 classifier__learning_rate: [0.05, 0.3]
 
 preprocessor__num__imputer__strategy : ['mean', 'median']
-preprocessor__num__drop_coluns_nan__max_range_null : [0.8,0.7,0.6]
 
 
-n_inter_params: 15
+n_inter_params: 25
 error_score_params: 0
 verbose_params: 3
 n_jobs_params: -1
@@ -31,4 +30,4 @@ n_jobs_params: -1
 
 classifier_FeatureSelector: classifier
 kfold_FeatureSelector: 5
-features_to_get_params: 10
+features_to_get_params: 12

@@ -1,5 +1,97 @@
 # challenge_ml
 
+## Index 
+* [Overview](#overview)
+
+<h1 align="center">Challenge ML</h1>
+
+## Please if you'vent read  (README), please go back and follow the stpes to install and undertanding how Kedro Works
+
+## Objectives
+
+
+* Minimize the costs from a company with Maintance
+* Build a scalable machine learning model with integrated and open tested pipelines using Kedro
+
+
+
+
+## Data
+ 
+The data is Split in Validation Dataset (2020) and Train Dataset (Pre 2020)·
+All columns for bureaucratic reasons are coded.  For this reason any AED would’nt be so useful to  undertand the  problema.
+Caracteristcis columns:
+
+* 171 Columnas ( type: ‘Object’)
+* 1 Feature Target ( Column: ‘class’)
+*  170 Feature Training (insted missing value, has a string ‘na’ )
+
+
+
+## Strategy 
+This is a classic classification  problem, where the costs of pos-maintance are expensive then pre-mantaince where recall metric is the fit for the problem. So was create a cost function that need be minimize.
+How our data is non-balance data (98% - negative - 2% - pos) i used undersample technique to keep the caracteristics of ‘pos’ samples.
+
+
+
+### Pipelines
+
+
+* Feature Selection
+* Classifier ML
+* Validation Results
+
+
+
+<img src="docs/images/kedroviz.png" > 
+ 
+## Feature Selection
+
+As coded columns and an analysis of them difficult to interpret, it was created a pipeline to find the best features that will be use the classifier_ml.
+4 Steps to complet all the  imblearn.pipeline.
+
+* https://imbalanced-learn.org/stable/references/pipeline.html#module-imblearn.pipeline
+
+Preprocessing:
+*    1- ReplaceStr - Replace ‘na’ to np.Nan (missing Values).  
+*    2- CastFeature - Transform columns object to Float
+*    3- Imputer - Replace missing values (np.Nan) by the medium.
+
+UnderSample
+* RandomUnderSampler -  How our data is non-balance data (98% - negative - 2% - pos), i used undersample tecicnique to mantein the caracteristics of ‘pos’ samples.
+
+* https://imbalanced-learn.org/stable/references/generated/imblearn.under_sampling.RandomUnderSampler.html
+
+
+SequentialFeatureSelector
+* To deal with so many features, was used SequentialFeatureSelector and RandomForest, to find the best features. Was used randomforest because bootstrap method would deal well with the probleam. (Many coluns coded ). 
+*  https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SequentialFeatureSelector.html
+
+Output - Feature Selection:
+
+* It's list with 10 best features. 
+
+## Classifier ML
+
+Preprocessing: Sabe from Feature Selection.
+
+Feature Engineering:
+* PolynomialFeatures() -> Now having 10 columns it's possible create new features. 
+
+https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.PolynomialFeatures.html
+
+GradientBoostingClassifier
+* Now having good features, was used a greedy model to find the best classification model.
+* RandomizeSearch will use a cost funcion to be minimize.
+
+
+## Validation Results
+Will use the trained_tuned_model from classifier ML to predict the Data from (data_2020, in catalog.)
+The resulst are in Mlflow
+
+## Pipelines Description.
+[Pipelines Description Docs](src/challenge_ml/README.md)
+
 ## Overview
 
 This is your new Kedro project, which was generated using `Kedro 0.18.0`.
@@ -43,20 +135,6 @@ kedro test
 
 To configure the coverage threshold, go to the `.coveragerc` file.
 
-## Project dependencies
-
-To generate or update the dependency requirements for your project:
-
-```
-kedro build-reqs
-```
-
-This will `pip-compile` the contents of `src/requirements.txt` into a new file `src/requirements.lock`. You can see the output of the resolution by opening `src/requirements.lock`.
-
-After this, if you'd like to update your project requirements, please update `src/requirements.txt` and re-run `kedro build-reqs`.
-
-[Further information about project dependencies](https://kedro.readthedocs.io/en/stable/kedro_project_setup/dependencies.html#project-specific-dependencies)
-
 ## How to work with Kedro and notebooks
 
 > Note: Using `kedro jupyter` or `kedro ipython` to run your notebook provides these variables in scope: `context`, `catalog`, and `startup_error`.
@@ -76,47 +154,3 @@ After installing Jupyter, you can start a local notebook server:
 kedro jupyter notebook
 ```
 
-### JupyterLab
-To use JupyterLab, you need to install it:
-
-```
-pip install jupyterlab
-```
-
-You can also start JupyterLab:
-
-```
-kedro jupyter lab
-```
-
-### IPython
-And if you want to run an IPython session:
-
-```
-kedro ipython
-```
-
-### How to convert notebook cells to nodes in a Kedro project
-You can move notebook code over into a Kedro project structure using a mixture of [cell tagging](https://jupyter-notebook.readthedocs.io/en/stable/changelog.html#release-5-0-0) and Kedro CLI commands.
-
-By adding the `node` tag to a cell and running the command below, the cell's source code will be copied over to a Python file within `src/<package_name>/nodes/`:
-
-```
-kedro jupyter convert <filepath_to_my_notebook>
-```
-> *Note:* The name of the Python file matches the name of the original notebook.
-
-Alternatively, you may want to transform all your notebooks in one go. Run the following command to convert all notebook files found in the project root directory and under any of its sub-folders:
-
-```
-kedro jupyter convert --all
-```
-
-### How to ignore notebook output cells in `git`
-To automatically strip out all output cell contents before committing to `git`, you can run `kedro activate-nbstripout`. This will add a hook in `.git/config` which will run `nbstripout` before anything is committed to `git`.
-
-> *Note:* Your output cells will be retained locally.
-
-## Package your Kedro project
-
-[Further information about building project documentation and packaging your project](https://kedro.readthedocs.io/en/stable/tutorial/package_a_project.html)

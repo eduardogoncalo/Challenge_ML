@@ -15,8 +15,9 @@ def create_ibmpipeline_featureselector(
     kfold,
     n_features_to_select_params: int,
 ):
-    """In this function will be create a pipeline from iblearn that will be fit. Using the proprietis of the pipeline
-    it's possible build personalized steps. Mode details at README"""
+    """In this function will be create a pipeline from iblearn that will be fit.
+    Using the proprietis of the pipeline it's possible build personalized steps.
+    More details at README"""
 
     X = data_train.drop(columns=target_feature)
     y = data_train[target_feature]
@@ -58,6 +59,8 @@ def create_ibmpipeline_featureselector(
 def get_best_features(
     trained_pipeline_FeatureSelector: Pipeline, classifier_FeatureSelector: str
 ) -> list:
+    '''This function will return a list with the best features to be train in 
+    next pipeline. '''
     features_bool = trained_pipeline_FeatureSelector.named_steps[
         classifier_FeatureSelector
     ].support_

@@ -1,6 +1,6 @@
 from kedro.pipeline import Pipeline, node
 from .nodes import create_ibmpipeline_featureselector, get_best_features
-from ..classifier_ml.nodes import split_train_test, fit_model, randomizesearch_kfold
+from ..classifier_ml.nodes import split_train_test, fit_model
 
 
 def create_pipeline(**kwargs):
